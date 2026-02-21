@@ -1,0 +1,42 @@
+import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib.animation import FuncAnimation
+
+# Heart curve
+t = np.linspace(0, 2*np.pi, 600)
+x = 16 * np.sin(t)**3
+y = (13 * np.cos(t)
+     - 5 * np.cos(2*t)
+     - 2 * np.cos(3*t)
+     - np.cos(4*t))
+
+fig, ax = plt.subplots(facecolor="black")
+ax.set_facecolor("black")
+ax.set_aspect("equal")
+ax.axis("off")
+
+# Glow layers
+glow1, = ax.plot(x[:1], y[:1], color="#ff0055", linewidth=10, alpha=0.15)
+glow2, = ax.plot(x[:1], y[:1], color="#ff2f92", linewidth=6, alpha=0.25)
+
+# Main neon line
+line, = ax.plot(x[:1], y[:1], color="#ff4fd8", linewidth=2)
+
+ax.set_xlim(min(x)-2, max(x)+2)
+ax.set_ylim(min(y)-2, max(y)+2)
+
+def animate(i):
+    glow1.set_data(x[:i+1], y[:i+1])
+    glow2.set_data(x[:i+1], y[:i+1])
+    line.set_data(x[:i+1], y[:i+1])
+    return glow1, glow2, line
+
+FuncAnimation(
+    fig,
+    animate,
+    frames=len(x),
+    interval=30,   # cinematic slow draw
+    blit=False     # IMPORTANT FIX
+)
+
+plt.show()
